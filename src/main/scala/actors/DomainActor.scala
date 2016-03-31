@@ -20,4 +20,6 @@ class DomainActor extends Actor with ActorLogging {
 
 
   printActor ! PrintMsg("Hello from DomainActor")
+
+  // printActor ! "failover"
 }

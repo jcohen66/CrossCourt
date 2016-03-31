@@ -19,7 +19,7 @@ object CrossCourtMain extends App {
 
 
 
-  Thread.sleep(5000)
+  Thread.sleep(60000)
 
   // Cleanup
   domainActor ! PoisonPill

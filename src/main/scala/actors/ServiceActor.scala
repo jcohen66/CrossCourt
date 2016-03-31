@@ -18,11 +18,13 @@ class ServiceActor extends Actor with ActorLogging {
   val daoActor = context.actorOf(Props(new DaoActor(printActor)), "dao-actor")
   val authenticatorActor = context.actorOf(Props[AuthenticationActor], "crosscourt-authenticator-actor")
   val userActor = context.actorOf(Props[UserActor], "user-actor")
+  val webActor = context.actorOf(Props[WebActor], "web-actor")
 
   serviceReaper ! WatchMe(printActor)
   serviceReaper ! WatchMe(daoActor)
   serviceReaper ! WatchMe(authenticatorActor)
   serviceReaper ! WatchMe(userActor)
+  serviceReaper ! WatchMe(webActor)
 
   printActor ! PrintMsg("This is a message")
 

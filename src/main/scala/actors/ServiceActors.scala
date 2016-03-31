@@ -10,4 +10,5 @@ object ServiceActors {
 
   val PrintActorPath = ServiceBasePath + "print-actor"
   val AuthenticatorPath = ServiceBasePath + "crosscourt-authenticator-actor"
+  val WebActorPath = ServiceBasePath + "web-actor"
 }

@@ -12,7 +12,7 @@ class PrintActor extends Actor with ActorLogging {
 
   def receive = {
     case PrintMsg(s) => printToConsole(s)
-    case _ =>
+    case _ => throw new IllegalStateException("Just fail already!")
   }
 
   def printToConsole(s: String): Unit = {
