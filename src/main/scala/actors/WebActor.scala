@@ -1,5 +1,7 @@
 package actors
 
+import actors.CalcActor.{Times2, Times2Response}
+import actors.PrintActor.PrintMsg
 import akka.actor.{Actor, ActorLogging}
 import akka.http.Http
 import akka.http.model.HttpMethods._
@@ -33,7 +35,12 @@ class WebActor extends Actor with ActorLogging {
   }
 
 
+  //  implicit val resolveTimeout = Timeout(5 seconds)
+  val calcActor = Await.result(context.actorSelection(DomainActors.CalcActorPath).resolveOne(), ServiceActors.resolveTimeout.duration)
+
+
   def receive = {
+    case Times2Response(i) => printActor ! PrintMsg("Response: " + i)
     case _ =>
   }
 
@@ -53,6 +60,19 @@ class WebActor extends Actor with ActorLogging {
           HttpResponse(entity = convertToString(input))
         }
       }
+
+      case HttpRequest(GET, Uri.Path("/calc"), _, _, _) => {
+        request.uri.query.get("num") match {
+          case Some(n) =>
+            Future[HttpResponse] {
+              calcActor ! Times2(n.toInt)
+              // printActor ! PrintMsg("got a calc request " + n)
+              HttpResponse(status = StatusCodes.OK)
+            }
+        }
+
+      }
+
       // match GET pat. Return a single ticker
       case HttpRequest(GET, Uri.Path("/get"), _, _, _) => {
         // next we match on the query paramter
@@ -85,13 +105,13 @@ class WebActor extends Actor with ActorLogging {
     }
   }
 
-  def convertToString(input: List[BSONDocument]) : String = {
+  def convertToString(input: List[BSONDocument]): String = {
     input
       .map(f => convertToString(f))
       .mkString("[", ",", "]")
   }
 
-  def convertToString(input: BSONDocument) : String = {
+  def convertToString(input: BSONDocument): String = {
     Json.stringify(BSONFormats.toJSON(input))
   }
 }
