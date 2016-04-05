@@ -1,11 +1,14 @@
 package actors
 
 import actors.CalcActor.{Times2, Times2Response}
-import akka.actor.Actor
+import akka.actor.{Props, Actor}
 
 object CalcActor {
-  case class Times2(i: Int)
-  case class Times2Response(i: Int)
+  trait CalcMessage
+  case class Times2(i: Int) extends CalcMessage
+  case class Times2Response(i: Int) extends CalcMessage
+
+  def props = Props(classOf[CalcActor])
 }
 
 class CalcActor extends Actor {

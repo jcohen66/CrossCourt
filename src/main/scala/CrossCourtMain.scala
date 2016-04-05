@@ -1,6 +1,6 @@
-import actors.deathwatch.Reaper.WatchMe
 import actors._
-import akka.actor.{PoisonPill, ActorSystem, Props}
+import actors.deathwatch.Reaper.WatchMe
+import akka.actor.{ActorSystem, Props}
 
 object CrossCourtMain extends App {
 
@@ -19,11 +19,11 @@ object CrossCourtMain extends App {
 
 
 
-  Thread.sleep(60000)
+  // Thread.sleep(60000)
 
   // Cleanup
-  domainActor ! PoisonPill
-  serviceActor ! PoisonPill
+  // domainActor ! PoisonPill
+  // serviceActor ! PoisonPill
 
 
 }

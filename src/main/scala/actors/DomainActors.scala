@@ -9,6 +9,6 @@ object DomainActors {
 
   val DomainBasePath = "akka://crosscourt-system/user/domain-actor/"
 
-  val CalcActorPath = DomainBasePath + "calc-actor"
+  val CalcActorPath = DomainBasePath + "round-robin-calc-pool"
 
 }

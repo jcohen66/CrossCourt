@@ -1,7 +1,7 @@
 package actors
 
 import actors.AuthenticationActor.{Authenticate, AuthenticationMessage, Denied, Granted}
-import actors.PrintActor.PrintMsg
+import actors.PrintActor.Print
 import akka.actor.Actor
 import akka.util.Timeout
 
@@ -16,9 +16,9 @@ class UserActor extends Actor {
 
   def receive = {
     case am: AuthenticationMessage => am match {
-      case Granted => printActor ! PrintMsg("Access Granted")
-      case Denied =>  printActor !  PrintMsg("Access Denied")
-      case _ => printActor ! PrintMsg("Unauthorized access attempt")
+      case Granted => printActor ! Print("Access Granted")
+      case Denied =>  printActor !  Print("Access Denied")
+      case _ => printActor ! Print("Unauthorized access attempt")
     }
   }
 

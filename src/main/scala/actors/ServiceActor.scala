@@ -1,6 +1,6 @@
 package actors
 
-import actors.PrintActor.PrintMsg
+import actors.PrintActor.Print
 import actors.deathwatch.Reaper.WatchMe
 import akka.actor.SupervisorStrategy.{Restart, Resume}
 import akka.actor.{Actor, ActorLogging, OneForOneStrategy, Props}
@@ -26,7 +26,7 @@ class ServiceActor extends Actor with ActorLogging {
   serviceReaper ! WatchMe(userActor)
   serviceReaper ! WatchMe(webActor)
 
-  printActor ! PrintMsg("This is a message")
+  printActor ! Print("This is a message")
 
   def receive = {
     case _ =>

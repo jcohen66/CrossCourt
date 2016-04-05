@@ -1,10 +1,10 @@
 package actors
 
 import actors.CalcActor.Times2Response
-import actors.PrintActor.PrintMsg
+import actors.PrintActor.Print
 import actors.deathwatch.Reaper.WatchMe
-import akka.actor.SupervisorStrategy.{Restart, Resume}
-import akka.actor.{OneForOneStrategy, Props, Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.routing._
 import akka.util.Timeout
 
 import scala.concurrent.Await
@@ -17,21 +17,19 @@ class DomainActor extends Actor with ActorLogging {
   implicit val resolveTimeout = Timeout(5 seconds)
   val printActor = Await.result(context.actorSelection(ServiceActors.PrintActorPath).resolveOne(), ServiceActors.resolveTimeout.duration)
 
-  val calcActor = context.actorOf(Props[CalcActor], "calc-actor")
 
-  domainReaper ! WatchMe(calcActor)
+  val calcRouterPoolActor = context.actorOf(RoundRobinPool(3).props(Props[CalcActor]), "round-robin-calc-pool")
+
+
+  domainReaper ! WatchMe(calcRouterPoolActor)
 
   def receive = {
-    case Times2Response(i) => printActor ! PrintMsg("Calculation response: " + i)
+    case Times2Response(i) => printActor ! Print("Calculation response: " + i)
     case _ =>
   }
 
-  override val supervisorStrategy = OneForOneStrategy(loggingEnabled = true) {
-    case ae: ArithmeticException => Resume
-    case _: Exception => Restart
-  }
 
-  printActor ! PrintMsg("Hello from DomainActor")
+  printActor ! Print("Hello from DomainActor")
 
   // printActor ! "failover"
 

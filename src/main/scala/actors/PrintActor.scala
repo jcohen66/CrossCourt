@@ -1,17 +1,18 @@
 package actors
 
-import actors.PrintActor.PrintMsg
+import actors.PrintActor.Print
 import akka.actor.{ActorLogging, Actor}
 
 
 object PrintActor {
-  case class PrintMsg(msg: String)
+  trait PrintMessage
+  case class Print(msg: String) extends PrintMessage
 }
 
 class PrintActor extends Actor with ActorLogging {
 
   def receive = {
-    case PrintMsg(s) => printToConsole(s)
+    case Print(s) => printToConsole(s)
     case _ => throw new IllegalStateException("Just fail already!")
   }
 

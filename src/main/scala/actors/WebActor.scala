@@ -1,7 +1,7 @@
 package actors
 
 import actors.CalcActor.{Times2, Times2Response}
-import actors.PrintActor.PrintMsg
+import actors.PrintActor.Print
 import akka.actor.{Actor, ActorLogging}
 import akka.http.Http
 import akka.http.model.HttpMethods._
@@ -40,7 +40,7 @@ class WebActor extends Actor with ActorLogging {
 
 
   def receive = {
-    case Times2Response(i) => printActor ! PrintMsg("Response: " + i)
+    case Times2Response(i) => printActor ! Print("Response: " + i)
     case _ =>
   }
 
